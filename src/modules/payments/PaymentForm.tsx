@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Checkbox from '@/components/form-components/Checkbox';
 import { TagsSelect } from '../tags';
 import { Alert } from '@/components/ui/alert';
+import Radio from '@/components/form-components/Radio';
 
 type Props = {};
 
@@ -25,7 +26,24 @@ const PaymentForm: React.FC<Props> = () => {
                     className="grid grid-cols-1 gap-4"
                 >
                     <Input label="Descripción" name="description" />
-                    <Input label="Importe" name="amount" type="number" min={0} />
+                    <Input
+                        label="Importe"
+                        name="amount"
+                        type="number"
+                        min={0}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (Number(val) < 0) return;
+                            form.setValue('amount', val);
+                        }}
+                    />
+                    <Radio
+                        name="amountType"
+                        options={[
+                            { value: 'outgoing', label: 'Gasto' },
+                            { value: 'income', label: 'Ingreso' },
+                        ]}
+                    />
                     <TagsSelect category="payments" name="tagIds" />
                     <Checkbox label="Es préstamo?" name="itIsLoan" />
                     {error && <Alert variant="destructive">{error.message}</Alert>}

@@ -33,12 +33,13 @@ const Checkbox: React.FC<CheckboxElementProps> = ({
         <FormField
             control={control}
             name={name}
+            defaultValue={false}
             render={({ field }) => (
                 <FormItem className={cn('flex items-end gap-x-2', props.className)}>
                     <FormControl>
                         <ShadcnCheckbox
                             {...field}
-                            className={cn('', inputClassName)}
+                            className={cn('cursor-pointer', inputClassName)}
                             disabled={props.disabled}
                             value={field.value}
                             checked={props.checked || field.value}
@@ -46,7 +47,7 @@ const Checkbox: React.FC<CheckboxElementProps> = ({
                         />
                     </FormControl>
                     {label && (
-                        <FormLabel className="h-fit">
+                        <FormLabel className="h-fit cursor-pointer">
                             {label}
                             {isOptional && <span className="text-neutral-400"> (optional)</span>}
                         </FormLabel>

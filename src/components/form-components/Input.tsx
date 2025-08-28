@@ -47,6 +47,7 @@ const Input: React.FC<InputElementProps> = ({
                     <FormControl>
                         <ShadcnInput
                             {...field}
+                            {...props}
                             placeholder={placeholder}
                             className={cn('', inputClassName)}
                             type={props.type || 'text'}
