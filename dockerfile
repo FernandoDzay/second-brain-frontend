@@ -1,4 +1,4 @@
-FROM node as vite-app
+FROM node:22.18.0-alpine as vite-app
 
 WORKDIR /app/client
 COPY . .
