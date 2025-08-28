@@ -22,6 +22,7 @@ ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 
 # ----- Command to build:
+# docker build -t fernandodzay/second-brain-frontend .
 # docker container stop second-brain-frontend
 # docker container rm second-brain-frontend
 # docker pull fernandodzay/second-brain-frontend
