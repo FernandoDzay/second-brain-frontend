@@ -1,4 +1,4 @@
-import { SiteHeader } from '@/components/site-header';
+import { SiteHeader } from '@/components/example-dashboard/site-header';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
