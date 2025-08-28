@@ -1,9 +1,21 @@
 import { AuthUIProvider } from '@daveyplate/better-auth-ui';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authClient } from './authClient';
 
 type Props = {
     children: React.ReactNode;
+};
+
+const AuthLink: React.ComponentType<{
+    href: string;
+    className?: string;
+    children: React.ReactNode;
+}> = (props: { href: string; className?: string; children: React.ReactNode }) => {
+    return (
+        <Link to={props.href} className={props.className}>
+            {props.children}
+        </Link>
+    );
 };
 
 const AuthProvider: React.FC<Props> = ({ children }) => {
@@ -16,8 +28,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
             credentials={{ forgotPassword: false }}
             localization={{}}
             navigate={navigate}
-            // @ts-ignore
-            Link={NavLink}
+            Link={AuthLink}
         >
             {children}
         </AuthUIProvider>

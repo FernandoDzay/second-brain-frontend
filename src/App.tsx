@@ -5,6 +5,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'sonner';
 import AuthProvider from '@/modules/auth/AuthProvider';
 import { BrowserRouter } from 'react-router-dom';
+import * as z from 'zod';
+import { es } from 'zod/locales';
+
+z.config(es());
 
 const queryClient = new QueryClient({
     defaultOptions: {

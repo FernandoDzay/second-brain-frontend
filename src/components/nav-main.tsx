@@ -9,9 +9,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-export function NavMain({
-    items,
-}: {
+import { IconBolt } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
+
+export function NavMain({}: {
     items: {
         title: string;
         url: string;
@@ -41,14 +42,22 @@ export function NavMain({
                     </SidebarMenuItem>
                 </SidebarMenu>
                 <SidebarMenu>
-                    {items.map((item) => (
+                    {/* {items.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton tooltip={item.title}>
                                 {item.icon && <item.icon />}
                                 <span>{item.title}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                    ))}
+                    ))} */}
+                    <SidebarMenuItem>
+                        <Link to="/shortcuts">
+                            <SidebarMenuButton tooltip="Shortcuts">
+                                <IconBolt />
+                                <span>ShortCuts</span>
+                            </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
