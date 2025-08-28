@@ -27,7 +27,7 @@ function App() {
                 </AuthProvider>
             </BrowserRouter>
             <Toaster />
-            <ReactQueryDevtools initialIsOpen={false} />
+            {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
         </QueryClientProvider>
     );
 }

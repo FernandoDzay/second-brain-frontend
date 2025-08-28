@@ -22,13 +22,7 @@ ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 
 # ----- Command to build:
-# docker build -t second-brain-frontend .
-# ----- Command to deploy:
-# docker run -d --name second-brain-frontend -p 3014:80 second-brain-frontend
-
-# ----- Commands to redeploy:
 # docker container stop second-brain-frontend
 # docker container rm second-brain-frontend
-# docker image rm second-brain-frontend
-# docker build -t second-brain-frontend .
-# docker run -d --name second-brain-frontend -p 3014:80 second-brain-frontend
+# docker pull fernandodzay/second-brain-frontend
+# docker run -d --name second-brain-frontend -p 3014:80 fernandodzay/second-brain-frontend
