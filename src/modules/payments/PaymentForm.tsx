@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { CreatePaymentSchema, useCreatePayment } from './payment-endpoints';
+import { CreatePaymentDto, CreatePaymentSchema } from './payment-endpoints';
 import { Form } from '@/components/ui/form';
 import { Input } from '@/components/form-components';
 import { Button } from '@/components/ui/button';
@@ -8,29 +8,39 @@ import Checkbox from '@/components/form-components/Checkbox';
 import { TagsSelect } from '../tags';
 import { Alert } from '@/components/ui/alert';
 import Radio from '@/components/form-components/Radio';
+import { ApiError } from '@/common/apiCall';
+import { Payment } from '@/common/entity-types';
 
-type Props = {};
+type Props = {
+    onSubmit: (data: CreatePaymentDto) => void;
+    loading?: boolean;
+    error: ApiError | null;
+    initialState?: Payment;
+};
 
-const PaymentForm: React.FC<Props> = () => {
-    const { mutate, isPending, error } = useCreatePayment();
-
+const PaymentForm: React.FC<Props> = ({ onSubmit, loading, error, initialState }) => {
     const form = useForm({
         resolver: zodResolver(CreatePaymentSchema),
+        defaultValues: initialState
+            ? {
+                  amount: Math.abs(initialState.amount),
+                  amountType: initialState.amount > 0 ? 'income' : 'outgoing',
+                  description: initialState.description,
+                  itIsLoan: initialState.itIsLoan,
+                  tagIds: initialState.tags?.map((tag) => tag.id),
+              }
+            : undefined,
     });
 
     return (
         <>
             <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit((payment) => mutate(payment))}
-                    className="grid grid-cols-1 gap-4"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4">
                     <Input label="Descripción" name="description" />
                     <Input
                         label="Importe"
                         name="amount"
                         type="number"
-                        min={0}
                         onChange={(e) => {
                             const val = e.target.value;
                             if (Number(val) < 0) return;
@@ -47,7 +57,7 @@ const PaymentForm: React.FC<Props> = () => {
                     <TagsSelect category="payments" name="tagIds" />
                     <Checkbox label="Es préstamo?" name="itIsLoan" />
                     {error && <Alert variant="destructive">{error.message}</Alert>}
-                    <Button type="submit" loading={isPending}>
+                    <Button type="submit" loading={loading}>
                         Guardar
                     </Button>
                 </form>

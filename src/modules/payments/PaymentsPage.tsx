@@ -1,24 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSetAppTitle } from '../dashboard/HeaderLayout';
-import { FullCenteredSection } from '@/components/layout-helpers';
-import PaymentForm from './PaymentForm';
+import FiltersBtn from '@/components/Filtersbtn';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import PaymentsTable from './PaymentsTable';
+import { useGetPayments } from './payment-endpoints';
 
 type Props = {};
 
 const PaymentsPage: React.FC<Props> = () => {
-    useSetAppTitle('Crear pago');
+    const { data } = useGetPayments();
 
     return (
-        <FullCenteredSection>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Formulario de pago</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <PaymentForm />
-                </CardContent>
-            </Card>
-        </FullCenteredSection>
+        <>
+            <div className="flex gap-2">
+                <Link to="/payments/create">
+                    <Button variant="success">
+                        <Plus /> Crear nuevo pago
+                    </Button>
+                </Link>
+                <FiltersBtn></FiltersBtn>
+            </div>
+            <PaymentsTable data={data} />
+        </>
     );
 };
 

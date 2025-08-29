@@ -51,7 +51,7 @@ const Radio: React.FC<Props> = ({
                     )}
                     <FormControl>
                         <RadioGroup
-                            defaultValue={options?.[0].value || undefined}
+                            defaultValue={field.value || options?.[0].value || undefined}
                             className={cn(orientation === 'horizontal' ? 'flex' : '')}
                             name={field.name}
                             onValueChange={(val) => field.onChange(val)}

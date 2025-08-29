@@ -6,8 +6,11 @@ export type Payment = {
     description: string;
     amount: number;
     itIsLoan: boolean;
+    createdAt: string;
+    updatedAt: string;
 
     user?: User;
+    tags?: Tag[];
 };
 
 export type User = {

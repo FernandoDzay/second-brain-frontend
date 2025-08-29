@@ -1,6 +1,8 @@
 import { AuthGuard, AuthPage } from '@/modules/auth';
-import { DashboardLayout, DashBoardPage, HeaderLayout } from '@/modules/dashboard';
+import { DashboardLayout, DashBoardPage } from '@/modules/dashboard';
 import { PaymentsPage } from '@/modules/payments';
+import CreatePaymentPage from '@/modules/payments/CreatePaymentPage';
+import EditPaymentPage from '@/modules/payments/EditPaymentPage';
 import { ShortcutsPage } from '@/modules/shortcuts';
 import { Route, Routes } from 'react-router-dom';
 
@@ -12,10 +14,11 @@ const Router: React.FC<Props> = () => {
             <Route element={<AuthGuard />}>
                 <Route element={<DashboardLayout />}>
                     <Route index element={<DashBoardPage />} />
-                </Route>
-                <Route element={<HeaderLayout />}>
                     <Route path="/shortcuts" element={<ShortcutsPage />} />
-                    <Route path="/payments/create" element={<PaymentsPage />} />
+
+                    <Route path="/payments" element={<PaymentsPage />} />
+                    <Route path="/payments/create" element={<CreatePaymentPage />} />
+                    <Route path="/payments/:id" element={<EditPaymentPage />} />
                 </Route>
             </Route>
             <Route path="/auth/:pathname" element={<AuthPage />} />

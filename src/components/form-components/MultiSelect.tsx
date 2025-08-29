@@ -43,8 +43,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                         options={options}
                         name={name}
                         placeholder={placeholder}
-                        value={field.value}
+                        value={field.value?.map((value: string[]) => value.toString())}
                         {...props}
+                        defaultValue={field.value?.map((value: string[]) => value.toString())}
                         onValueChange={(value) => field.onChange(value)}
                     />
                     {description && <FormDescription>{description}</FormDescription>}
