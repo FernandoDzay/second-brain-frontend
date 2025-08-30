@@ -10,6 +10,7 @@ import { Alert } from '@/components/ui/alert';
 import Radio from '@/components/form-components/Radio';
 import { ApiError } from '@/common/apiCall';
 import { Payment } from '@/common/entity-types';
+import DatePicker from '@/components/form-components/DatePicker';
 
 type Props = {
     onSubmit: (data: CreatePaymentDto) => void;
@@ -27,6 +28,7 @@ const PaymentForm: React.FC<Props> = ({ onSubmit, loading, error, initialState }
                   amountType: initialState.amount > 0 ? 'income' : 'outgoing',
                   description: initialState.description,
                   itIsLoan: initialState.itIsLoan,
+                  date: initialState.date,
                   tagIds: initialState.tags?.map((tag) => tag.id),
               }
             : undefined,
@@ -54,6 +56,7 @@ const PaymentForm: React.FC<Props> = ({ onSubmit, loading, error, initialState }
                             { value: 'income', label: 'Ingreso' },
                         ]}
                     />
+                    <DatePicker name="date" defaultValue={new Date()} />
                     <TagsSelect category="payments" name="tagIds" />
                     <Checkbox label="Es préstamo?" name="itIsLoan" />
                     {error && <Alert variant="destructive">{error.message}</Alert>}

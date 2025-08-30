@@ -8,7 +8,6 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
 import ActionsBtn from '@/components/ActionsBtn';
 import { useDeletePayment } from './payment-endpoints';
 
@@ -36,7 +35,7 @@ const PaymentsTable: React.FC<Props> = (props) => {
                 {props.data?.map((item) => (
                     <TableRow key={item.id}>
                         <TableCell>{item.description}</TableCell>
-                        <TableCell>{format(item.createdAt, 'y-MM-dd')}</TableCell>
+                        <TableCell>{item.date}</TableCell>
                         <TableCell>{item.amount > 0 ? 'Ingreso' : 'Gasto'}</TableCell>
                         <TableCell>{Math.abs(item.amount)}</TableCell>
                         <TableCell>{item.itIsLoan ? 'Sí' : 'No'}</TableCell>

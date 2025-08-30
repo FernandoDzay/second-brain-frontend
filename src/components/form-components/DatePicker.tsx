@@ -10,7 +10,7 @@ import {
 } from '../ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Calendar } from '../ui/calendar';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
 
@@ -39,7 +39,7 @@ const DatePicker: React.FC<Props> = ({
         <FormField
             control={control}
             name={name}
-            defaultValue={defaultValue}
+            defaultValue={defaultValue ? format(defaultValue, 'y-MM-dd') : undefined}
             render={({ field }) => (
                 <FormItem className="flex flex-col">
                     {label && (
@@ -60,7 +60,7 @@ const DatePicker: React.FC<Props> = ({
                                     )}
                                 >
                                     {field.value ? (
-                                        format(field.value, 'y-MM-dd')
+                                        field.value
                                     ) : (
                                         <span>{placeholder || 'Elige una fecha'}</span>
                                     )}
@@ -71,8 +71,14 @@ const DatePicker: React.FC<Props> = ({
                         <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                                 mode="single"
-                                selected={field.value || new Date()}
-                                onSelect={field.onChange}
+                                selected={field.value ? parseISO(field.value) : new Date()}
+                                onSelect={(newValue) =>
+                                    newValue
+                                        ? field.onChange(format(newValue, 'y-MM-dd'))
+                                        : field.onChange(
+                                              format(defaultValue || new Date(), 'y-MM-dd'),
+                                          )
+                                }
                                 disabled={(date) =>
                                     date > new Date() || date < new Date('1900-01-01')
                                 }

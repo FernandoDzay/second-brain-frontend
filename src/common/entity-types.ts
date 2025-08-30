@@ -6,6 +6,7 @@ export type Payment = {
     description: string;
     amount: number;
     itIsLoan: boolean;
+    date: string;
     createdAt: string;
     updatedAt: string;
 
