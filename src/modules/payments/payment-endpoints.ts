@@ -30,10 +30,22 @@ export const useCreatePayment = () => {
     });
 };
 
-export const useGetPayments = (filters?: any) => {
+export const FindAllPaymentsSchema = z
+    .object({
+        description: z.coerce.string(),
+        amountStart: z.coerce.number(),
+        amountEnd: z.coerce.number(),
+        itIsLoan: z.coerce.boolean(),
+        createdAtStart: z.coerce.date(),
+        createdAtEnd: z.coerce.date(),
+        tags: z.array(z.coerce.number()),
+    })
+    .partial();
+export type FindAllPaymentsDto = z.infer<typeof FindAllPaymentsSchema>;
+export const useGetPayments = (filters?: FindAllPaymentsDto) => {
     return useQuery<Payment[], ApiError>({
         queryFn: () => apiCall({ url: '/payments', method: 'GET', data: filters }),
-        queryKey: [paymentsQueryKey, filters],
+        queryKey: [paymentsQueryKey],
     });
 };
 
@@ -67,6 +79,41 @@ export const useDeletePayment = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [paymentsQueryKey] });
             toast.success('Se eliminó correctamente');
+        },
+    });
+};
+
+export const useRelatePayments = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<undefined, ApiError, number[]>({
+        mutationFn: (data) => apiCall({ url: `/payments/relate-payments`, method: 'POST', data }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [paymentsQueryKey] });
+            toast.success('Pagos relacionados correctamente');
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
+};
+
+export const unrelatePaymentsSchema = z.object({
+    paymentId_1: z.number(),
+    paymentId_2: z.number(),
+});
+export type unrelatePaymentsDto = z.infer<typeof unrelatePaymentsSchema>;
+export const useUnrelatePayments = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<undefined, ApiError, unrelatePaymentsDto>({
+        mutationFn: (data) => apiCall({ url: `/payments/unrelate-payments`, method: 'POST', data }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [paymentsQueryKey] });
+            toast.success('Relación eliminada correctamente');
+        },
+        onError: (error) => {
+            toast.error(error.message);
         },
     });
 };

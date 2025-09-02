@@ -12,6 +12,7 @@ export type Payment = {
 
     user?: User;
     tags?: Tag[];
+    payments?: Payment[];
 };
 
 export type User = {

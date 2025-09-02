@@ -13,7 +13,12 @@ z.config(es());
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
+            refetchOnWindowFocus: false,
             retry: false,
+            refetchOnMount: true,
+            retryOnMount: false,
+            refetchOnReconnect: false,
+            staleTime: 1000 * 60 * 5,
         },
     },
 });
@@ -28,7 +33,9 @@ function App() {
             </BrowserRouter>
             <Toaster />
 
-            {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+            {import.meta.env.DEV && (
+                <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+            )}
         </QueryClientProvider>
     );
 }

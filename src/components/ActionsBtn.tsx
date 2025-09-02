@@ -18,6 +18,7 @@ type Props = {
         icon?: IconType | Exclude<React.ReactNode, string>;
         destructive?: boolean;
         onClick?: () => void;
+        hidden?: boolean;
     }[];
 };
 
@@ -32,31 +33,33 @@ const ActionsBtn: React.FC<Props> = ({ children, options }) => {
             <DropdownMenuContent>
                 {children}
                 <DropdownMenuGroup>
-                    {options?.map((item, key) => (
-                        <DropdownMenuItem
-                            key={key}
-                            className="cursor-pointer"
-                            variant={
-                                item?.icon === 'delete' || item.destructive
-                                    ? 'destructive'
-                                    : 'default'
-                            }
-                            onClick={item.onClick}
-                        >
-                            {item.icon === 'watch' ? (
-                                <IconSearch />
-                            ) : item.icon === 'edit' ? (
-                                <IconEdit />
-                            ) : item.icon === 'delete' ? (
-                                <IconTrash />
-                            ) : item.icon === 'create' ? (
-                                <Plus />
-                            ) : (
-                                item.icon
-                            )}
-                            {item.label}
-                        </DropdownMenuItem>
-                    ))}
+                    {options?.map((item, key) =>
+                        item.hidden ? null : (
+                            <DropdownMenuItem
+                                key={key}
+                                className="cursor-pointer"
+                                variant={
+                                    item?.icon === 'delete' || item.destructive
+                                        ? 'destructive'
+                                        : 'default'
+                                }
+                                onClick={item.onClick}
+                            >
+                                {item.icon === 'watch' ? (
+                                    <IconSearch />
+                                ) : item.icon === 'edit' ? (
+                                    <IconEdit />
+                                ) : item.icon === 'delete' ? (
+                                    <IconTrash />
+                                ) : item.icon === 'create' ? (
+                                    <Plus />
+                                ) : (
+                                    item.icon
+                                )}
+                                {item.label}
+                            </DropdownMenuItem>
+                        ),
+                    )}
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

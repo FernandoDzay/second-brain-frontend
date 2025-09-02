@@ -1,8 +1,13 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import WrapperLoader from '../WrapperLoader';
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+function Card({
+    className,
+    loading,
+    ...props
+}: React.ComponentProps<'div'> & { loading?: boolean }) {
     return (
         <div
             data-slot="card"
@@ -11,7 +16,15 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
                 className,
             )}
             {...props}
-        />
+        >
+            {loading ? (
+                <WrapperLoader childrenWrapperClassName="flex flex-col gap-6 w-full max-w-sm">
+                    {props.children}
+                </WrapperLoader>
+            ) : (
+                props.children
+            )}
+        </div>
     );
 }
 
