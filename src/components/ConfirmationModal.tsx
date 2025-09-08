@@ -35,7 +35,9 @@ const ConfirmationModal: React.FC<Props> = ({
                     </DialogHeader>
                     <DialogDescription>{description}</DialogDescription>
                     <DialogFooter>
-                        <Button variant="outline">Cancelar</Button>
+                        <Button variant="outline" onClick={() => onOpenChange(false)}>
+                            Cancelar
+                        </Button>
                         <Button loading={loading} onClick={onConfirm}>
                             Confirmar
                         </Button>
