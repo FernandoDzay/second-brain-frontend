@@ -5,7 +5,7 @@ export function NavUser() {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <UserButton className="w-[100%]" />
+                <UserButton className="w-[100%]" size="default" />
             </SidebarMenuItem>
         </SidebarMenu>
     );

@@ -11,12 +11,14 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
     const { pathname } = useLocation();
+    const sidebar = useSidebar();
     const mainLinks = [
         {
             label: 'Dashboard',
@@ -53,7 +55,12 @@ const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
                         <SidebarMenu>
                             {mainLinks.map((item, key) => (
                                 <SidebarMenuItem key={key}>
-                                    <Link to={item.link}>
+                                    <Link
+                                        to={item.link}
+                                        onClick={() => {
+                                            if (sidebar.isMobile) sidebar.setOpenMobile(false);
+                                        }}
+                                    >
                                         <SidebarMenuButton
                                             className={cn(
                                                 item.link === pathname
