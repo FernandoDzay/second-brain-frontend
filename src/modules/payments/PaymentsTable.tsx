@@ -19,6 +19,7 @@ import { Plus, Unlink } from 'lucide-react';
 import { MotionEffect } from '@/components/animate-ui/effects/motion-effect';
 import { DataTablePagination } from '@/components/datagrid/DataTablePagination';
 import EmptyTable from '@/components/datagrid/EmptyTable';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 type Props = {
     data?: Payment[];
@@ -29,10 +30,13 @@ type Props = {
 
 const PaymentsTable: React.FC<Props> = (props) => {
     const navigate = useNavigate();
-    const { mutate: deletePayment } = useDeletePayment();
+    const { mutateAsync: deletePayment, isPending: deletePagoLoading } = useDeletePayment();
     const [rowSelection, setRowSelection] = useState({});
     const relatePaymentsMutation = useRelatePayments();
     const unrelatePaymentsMutation = useUnrelatePayments();
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState<number | null>(null);
+    const [confirmRelateModal, setConfirmRelateModal] = useState(false);
+    const [confirmUnRelateModal, setConfirmUnRelateModal] = useState<number | null>(null);
 
     const columns = useMemo<ColumnDef<Payment>[]>(
         () => [
@@ -91,17 +95,13 @@ const PaymentsTable: React.FC<Props> = (props) => {
                             {
                                 icon: 'delete',
                                 label: 'Eliminar',
-                                onClick: () => deletePayment(row.id),
+                                onClick: () => setConfirmDeleteModal(row.id),
                                 hidden: props.isSimpleTable,
                             },
                             {
                                 icon: <Unlink />,
                                 label: 'Eliminar relación',
-                                onClick: () =>
-                                    unrelatePaymentsMutation.mutate({
-                                        paymentId_1: row.id,
-                                        paymentId_2: props.parentPaymentId!,
-                                    }),
+                                onClick: () => setConfirmUnRelateModal(row.id),
                                 hidden: !props.isSimpleTable || !props.parentPaymentId,
                                 destructive: true,
                             },
@@ -146,14 +146,7 @@ const PaymentsTable: React.FC<Props> = (props) => {
                                         unrelatePaymentsMutation.isPending
                                     }
                                     disabled={table.getSelectedRowModel().rows.length < 2}
-                                    onClick={async () => {
-                                        await relatePaymentsMutation.mutateAsync(
-                                            table
-                                                .getSelectedRowModel()
-                                                .rows.map((row) => row.original.id),
-                                        );
-                                        table.setRowSelection({});
-                                    }}
+                                    onClick={() => setConfirmRelateModal(true)}
                                 >
                                     Relacionar pagos
                                 </Button>
@@ -194,6 +187,46 @@ const PaymentsTable: React.FC<Props> = (props) => {
                 </TBodyWithLoader>
             </Table>
             {!props.isSimpleTable && <DataTablePagination table={table} />}
+
+            <ConfirmationModal
+                open={confirmDeleteModal !== null}
+                onOpenChange={() => setConfirmDeleteModal(null)}
+                title="Borrar pago"
+                description="¿Confirmas eliminar el pago?"
+                loading={deletePagoLoading}
+                onConfirm={async () => {
+                    await deletePayment(confirmDeleteModal!);
+                    setConfirmDeleteModal(null);
+                }}
+            />
+            <ConfirmationModal
+                open={confirmRelateModal}
+                onOpenChange={setConfirmRelateModal}
+                title="Relacionar pagos"
+                description="¿Confirmas relacionar todos los pagos seleccionados?"
+                loading={relatePaymentsMutation.isPending}
+                onConfirm={async () => {
+                    await relatePaymentsMutation.mutateAsync(
+                        table.getSelectedRowModel().rows.map((row) => row.original.id),
+                    );
+                    table.setRowSelection({});
+                    setConfirmRelateModal(false);
+                }}
+            />
+            <ConfirmationModal
+                open={confirmUnRelateModal !== null}
+                onOpenChange={() => setConfirmUnRelateModal(null)}
+                title="Relacionar pagos"
+                description="¿Confirmas deshacer la relación del pago?"
+                loading={unrelatePaymentsMutation.isPending}
+                onConfirm={async () => {
+                    await unrelatePaymentsMutation.mutateAsync({
+                        paymentId_1: confirmUnRelateModal!,
+                        paymentId_2: props.parentPaymentId!,
+                    });
+                    setConfirmUnRelateModal(null);
+                }}
+            />
         </>
     );
 };
