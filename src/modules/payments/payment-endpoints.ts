@@ -117,3 +117,11 @@ export const useUnrelatePayments = () => {
         },
     });
 };
+
+export const useGetMonthPaymentsSummary = (date?: string) => {
+    return useQuery<{ income: number; outgoing: number }, ApiError>({
+        queryFn: () =>
+            apiCall({ url: '/payments/get-month-payments-summary', method: 'GET', data: { date } }),
+        queryKey: [paymentsQueryKey, 'getMonthPaymentsSummary'],
+    });
+};

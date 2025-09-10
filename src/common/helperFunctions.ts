@@ -25,3 +25,7 @@ export const objectToQueryString = (
     const query = params.toString();
     return query ? `?${query}` : '';
 };
+
+export const round = (number: number, decimals?: number) => {
+    return Number(number.toFixed(decimals || 2));
+};
