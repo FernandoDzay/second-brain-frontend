@@ -2,7 +2,12 @@ import { Payment } from '@/common/entity-types';
 import { Table, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Link, useNavigate } from 'react-router-dom';
 import ActionsBtn from '@/components/ActionsBtn';
-import { useDeletePayment, useRelatePayments, useUnrelatePayments } from './payment-endpoints';
+import {
+    FindAllPaymentsDto,
+    useDeletePayment,
+    useRelatePayments,
+    useUnrelatePayments,
+} from './payment-endpoints';
 import {
     ColumnDef,
     flexRender,
@@ -14,22 +19,25 @@ import { useMemo, useState } from 'react';
 import TBodyWithLoader from '@/components/datagrid/TBodyWithLoader';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import FiltersBtn from '@/components/Filtersbtn';
 import { Plus, Unlink } from 'lucide-react';
 import { MotionEffect } from '@/components/animate-ui/effects/motion-effect';
 import { DataTablePagination } from '@/components/datagrid/DataTablePagination';
 import EmptyTable from '@/components/datagrid/EmptyTable';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import PaymentsFilters from './PaymentsFilters';
 
 type Props = {
     data?: Payment[];
     loading?: boolean;
     isSimpleTable?: boolean;
     parentPaymentId?: number;
+    onFilter?: (data: FindAllPaymentsDto) => void;
+    onClear?: () => void;
 };
 
 const PaymentsTable: React.FC<Props> = (props) => {
     const navigate = useNavigate();
+    const emptyData = useMemo(() => [], []);
     const { mutateAsync: deletePayment, isPending: deletePagoLoading } = useDeletePayment();
     const [rowSelection, setRowSelection] = useState({});
     const relatePaymentsMutation = useRelatePayments();
@@ -114,7 +122,7 @@ const PaymentsTable: React.FC<Props> = (props) => {
     );
 
     const table = useReactTable({
-        data: props.data || [],
+        data: props.data || emptyData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -135,7 +143,10 @@ const PaymentsTable: React.FC<Props> = (props) => {
                                 <Plus /> Crear nuevo pago
                             </Button>
                         </Link>
-                        <FiltersBtn></FiltersBtn>
+                        <PaymentsFilters
+                            onSubmit={(data) => props.onFilter && props.onFilter(data)}
+                            onClear={() => props.onClear && props.onClear()}
+                        />
                     </div>
                     {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && (
                         <div className="flex gap-2 justify-end">

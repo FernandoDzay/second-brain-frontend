@@ -16,7 +16,7 @@ interface MultiSelectProps
     triggerClassName?: string;
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({
+const FormMultiSelect: React.FC<MultiSelectProps> = ({
     name,
     label,
     placeholder,
@@ -56,4 +56,4 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     );
 };
 
-export default MultiSelect;
+export default FormMultiSelect;

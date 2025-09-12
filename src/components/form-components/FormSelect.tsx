@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
 import {
-    Select as ShadcnSelect,
+    Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
@@ -28,7 +28,7 @@ interface SelectElementProps extends React.InputHTMLAttributes<HTMLSelectElement
     triggerClassName?: string;
 }
 
-const Select: React.FC<SelectElementProps> = ({
+const FormSelect: React.FC<SelectElementProps> = ({
     name,
     label,
     placeholder,
@@ -51,7 +51,7 @@ const Select: React.FC<SelectElementProps> = ({
                             {isOptional && <span className="text-neutral-400"> (optional)</span>}
                         </FormLabel>
                     )}
-                    <ShadcnSelect
+                    <Select
                         onValueChange={(v) => {
                             field.onChange(v);
                         }}
@@ -71,7 +71,7 @@ const Select: React.FC<SelectElementProps> = ({
                                 </SelectItem>
                             ))}
                         </SelectContent>
-                    </ShadcnSelect>
+                    </Select>
                     {description && <FormDescription>{description}</FormDescription>}
                     <FormMessage />
                 </FormItem>
@@ -80,4 +80,4 @@ const Select: React.FC<SelectElementProps> = ({
     );
 };
 
-export default Select;
+export default FormSelect;

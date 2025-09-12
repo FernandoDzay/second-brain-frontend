@@ -24,7 +24,7 @@ interface Props {
     className?: string;
 }
 
-const DatePicker: React.FC<Props> = ({
+const FormDatePicker: React.FC<Props> = ({
     name,
     label,
     description,
@@ -94,4 +94,4 @@ const DatePicker: React.FC<Props> = ({
     );
 };
 
-export default DatePicker;
+export default FormDatePicker;

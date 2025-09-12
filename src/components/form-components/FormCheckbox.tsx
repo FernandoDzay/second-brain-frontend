@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     FormControl,
     FormDescription,
@@ -19,7 +19,7 @@ interface CheckboxElementProps extends React.InputHTMLAttributes<HTMLInputElemen
     onCheckedChange?: (val: string | boolean) => void;
 }
 
-const Checkbox: React.FC<CheckboxElementProps> = ({
+const FormCheckbox: React.FC<CheckboxElementProps> = ({
     name,
     label,
     description,
@@ -37,7 +37,7 @@ const Checkbox: React.FC<CheckboxElementProps> = ({
             render={({ field }) => (
                 <FormItem className={cn('flex items-end gap-x-2', props.className)}>
                     <FormControl>
-                        <ShadcnCheckbox
+                        <Checkbox
                             {...field}
                             className={cn('cursor-pointer', inputClassName)}
                             disabled={props.disabled}
@@ -61,4 +61,4 @@ const Checkbox: React.FC<CheckboxElementProps> = ({
     );
 };
 
-export default Checkbox;
+export default FormCheckbox;

@@ -4,6 +4,7 @@ import { Payment } from '@/common/entity-types';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { zodAppBoolean } from '@/common/zod-helpers';
 
 export const paymentsQueryKey = 'Payments';
 
@@ -35,17 +36,17 @@ export const FindAllPaymentsSchema = z
         description: z.coerce.string(),
         amountStart: z.coerce.number(),
         amountEnd: z.coerce.number(),
-        itIsLoan: z.coerce.boolean(),
-        createdAtStart: z.coerce.date(),
-        createdAtEnd: z.coerce.date(),
+        itIsLoan: zodAppBoolean,
+        dateStart: z.iso.date(),
+        dateEnd: z.iso.date(),
         tags: z.array(z.coerce.number()),
     })
     .partial();
 export type FindAllPaymentsDto = z.infer<typeof FindAllPaymentsSchema>;
 export const useGetPayments = (filters?: FindAllPaymentsDto) => {
     return useQuery<Payment[], ApiError>({
-        queryFn: () => apiCall({ url: '/payments', method: 'GET', data: filters }),
-        queryKey: [paymentsQueryKey],
+        queryFn: () => apiCall({ url: '/payments', method: 'GET', params: filters }),
+        queryKey: [paymentsQueryKey, filters],
     });
 };
 
@@ -121,7 +122,11 @@ export const useUnrelatePayments = () => {
 export const useGetMonthPaymentsSummary = (date?: string) => {
     return useQuery<{ income: number; outgoing: number }, ApiError>({
         queryFn: () =>
-            apiCall({ url: '/payments/get-month-payments-summary', method: 'GET', data: { date } }),
-        queryKey: [paymentsQueryKey, 'getMonthPaymentsSummary'],
+            apiCall({
+                url: '/payments/get-month-payments-summary',
+                method: 'GET',
+                params: { date },
+            }),
+        queryKey: [paymentsQueryKey, 'getMonthPaymentsSummary', date],
     });
 };

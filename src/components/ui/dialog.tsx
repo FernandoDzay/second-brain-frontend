@@ -5,6 +5,8 @@ import { XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import { SheetDescription } from './sheet';
+
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
     return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
@@ -81,7 +83,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
             data-slot="dialog-header"
             className={cn('flex flex-col gap-2 text-center sm:text-left', className)}
             {...props}
-        />
+        >
+            {props.children}
+            <SheetDescription className="hidden" />
+        </div>
     );
 }
 

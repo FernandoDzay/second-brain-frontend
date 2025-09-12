@@ -7,7 +7,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Input as ShadcnInput } from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface InputElementProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -17,9 +17,10 @@ interface InputElementProps extends React.InputHTMLAttributes<HTMLInputElement> 
     isOptional?: boolean;
     inputClassName?: string;
     labelClassName?: string;
+    undefinedDefaultValue?: boolean;
 }
 
-const Input: React.FC<InputElementProps> = ({
+const FormInput: React.FC<InputElementProps> = ({
     name,
     label,
     placeholder,
@@ -27,6 +28,7 @@ const Input: React.FC<InputElementProps> = ({
     isOptional,
     labelClassName,
     inputClassName,
+    undefinedDefaultValue,
     ...props
 }) => {
     const { control } = useFormContext();
@@ -35,7 +37,7 @@ const Input: React.FC<InputElementProps> = ({
         <FormField
             control={control}
             name={name}
-            defaultValue=""
+            defaultValue={undefinedDefaultValue ? '' : undefined}
             render={({ field }) => (
                 <FormItem className={cn('', props.className)}>
                     {label && (
@@ -45,7 +47,7 @@ const Input: React.FC<InputElementProps> = ({
                         </FormLabel>
                     )}
                     <FormControl>
-                        <ShadcnInput
+                        <Input
                             {...field}
                             {...props}
                             placeholder={placeholder}
@@ -63,4 +65,4 @@ const Input: React.FC<InputElementProps> = ({
     );
 };
 
-export default Input;
+export default FormInput;

@@ -1,4 +1,4 @@
-import { MultiSelect } from '@/components/form-components';
+import { FormMultiSelect } from '@/components/form-components';
 import { AvailableTagsType } from './tags-catalog';
 import { useGetTags } from './tags-endpoints';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,7 @@ import CreateTagModal from './CreateTagModal';
 import { useState } from 'react';
 
 type Props = {
-    multiSelectProps?: React.ComponentProps<typeof MultiSelect>;
+    multiSelectProps?: React.ComponentProps<typeof FormMultiSelect>;
     category: AvailableTagsType;
     name: string;
 };
@@ -20,7 +20,7 @@ const TagsSelect: React.FC<Props> = (props) => {
     return (
         <>
             <div className="flex gap-2 items-center">
-                <MultiSelect
+                <FormMultiSelect
                     className="w-full"
                     loading={isFetching}
                     options={tags}

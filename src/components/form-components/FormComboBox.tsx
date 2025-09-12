@@ -30,7 +30,7 @@ interface ComboBoxProps {
     }[];
 }
 
-const ComboBox: React.FC<ComboBoxProps> = ({
+const FormComboBox: React.FC<ComboBoxProps> = ({
     name,
     value,
     label,
@@ -118,4 +118,4 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     );
 };
 
-export default ComboBox;
+export default FormComboBox;

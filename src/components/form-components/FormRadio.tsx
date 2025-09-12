@@ -24,7 +24,7 @@ type Props = {
     }[];
 };
 
-const Radio: React.FC<Props> = ({
+const FormRadio: React.FC<Props> = ({
     orientation = 'horizontal',
     name,
     className,
@@ -79,4 +79,4 @@ const Radio: React.FC<Props> = ({
     );
 };
 
-export default Radio;
+export default FormRadio;

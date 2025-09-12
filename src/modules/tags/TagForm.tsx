@@ -2,7 +2,7 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { CreateTagDto, CreateTagSchema } from './tags-endpoints';
-import { Input, Select } from '@/components/form-components';
+import { FormInput, FormSelect } from '@/components/form-components';
 import { Button } from '@/components/ui/button';
 import { ApiError } from '@/common/apiCall';
 import { AvailableTagsType } from './tags-catalog';
@@ -32,7 +32,7 @@ const TagForm: React.FC<Props> = ({ onSubmit, loading, error, forcedCategory }) 
                 }}
                 className="flex flex-col gap-4"
             >
-                <Select
+                <FormSelect
                     name="category"
                     label="Categoría"
                     disabled={forcedCategory !== undefined}
@@ -41,8 +41,8 @@ const TagForm: React.FC<Props> = ({ onSubmit, loading, error, forcedCategory }) 
                         { label: 'Notas', value: 'notes' },
                     ]}
                 />
-                <Input name="name" label="Nombre" />
-                <Input name="description" label="Descripción adicional" />
+                <FormInput name="name" label="Nombre" />
+                <FormInput name="description" label="Descripción adicional" />
 
                 {error && <p>{error.message}</p>}
 
