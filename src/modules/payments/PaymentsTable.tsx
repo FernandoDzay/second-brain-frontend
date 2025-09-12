@@ -25,14 +25,18 @@ import { DataTablePagination } from '@/components/datagrid/DataTablePagination';
 import EmptyTable from '@/components/datagrid/EmptyTable';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import PaymentsFilters from './PaymentsFilters';
+import { Badge } from '@/components/ui/badge';
+import TabButton from '@/components/TabButton';
+import { useGetTags } from '../tags/tags-endpoints';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
     data?: Payment[];
     loading?: boolean;
     isSimpleTable?: boolean;
     parentPaymentId?: number;
-    onFilter?: (data: FindAllPaymentsDto) => void;
-    onClear?: () => void;
+    filters?: FindAllPaymentsDto;
+    onFiltersChange?: (filters: FindAllPaymentsDto) => void;
 };
 
 const PaymentsTable: React.FC<Props> = (props) => {
@@ -45,6 +49,9 @@ const PaymentsTable: React.FC<Props> = (props) => {
     const [confirmDeleteModal, setConfirmDeleteModal] = useState<number | null>(null);
     const [confirmRelateModal, setConfirmRelateModal] = useState(false);
     const [confirmUnRelateModal, setConfirmUnRelateModal] = useState<number | null>(null);
+    const { data: tags, isLoading } = useGetTags();
+
+    const rawTags = [2, 1, 3, 4];
 
     const columns = useMemo<ColumnDef<Payment>[]>(
         () => [
@@ -87,6 +94,18 @@ const PaymentsTable: React.FC<Props> = (props) => {
             {
                 header: 'Es préstamo',
                 accessorFn: (row) => (row.itIsLoan ? 'Sí' : 'No'),
+            },
+            {
+                header: 'Tags',
+                cell: ({ row: { original: row } }) => (
+                    <div className="flex flex-wrap gap-2">
+                        {row.tags?.map((tag) => (
+                            <Badge key={tag.id} variant={'secondary'}>
+                                {tag.name}
+                            </Badge>
+                        ))}
+                    </div>
+                ),
             },
             {
                 id: 'actions',
@@ -144,10 +163,54 @@ const PaymentsTable: React.FC<Props> = (props) => {
                             </Button>
                         </Link>
                         <PaymentsFilters
-                            onSubmit={(data) => props.onFilter && props.onFilter(data)}
-                            onClear={() => props.onClear && props.onClear()}
+                            onSubmit={(data) =>
+                                props.onFiltersChange && props.onFiltersChange(data)
+                            }
+                            onClear={() => props.onFiltersChange && props.onFiltersChange({})}
                         />
                     </div>
+                    {isLoading ? (
+                        <div className="flex gap-2">
+                            {rawTags.map((tagId) => (
+                                <Skeleton key={tagId} className="h-[36px] w-[100px] rounded-full" />
+                            ))}
+                        </div>
+                    ) : !tags ? null : (
+                        <div className="flex gap-2">
+                            {rawTags.map((tagId) => {
+                                const tag = tags.find((tag) => tag.id === tagId);
+                                return tag ? (
+                                    <TabButton
+                                        key={tagId}
+                                        label={tag.name}
+                                        active={props.filters?.tags?.includes(tagId)}
+                                        onClick={() => {
+                                            if (!props.filters?.tags || !props.onFiltersChange)
+                                                return;
+
+                                            let newFilteredTabs: number[] = [];
+                                            if (props.filters?.tags?.includes(tagId))
+                                                newFilteredTabs = props.filters?.tags?.filter(
+                                                    (tab) => tab !== tagId,
+                                                );
+                                            else newFilteredTabs = [...props.filters?.tags, tagId];
+
+                                            props.onFiltersChange({
+                                                ...props.filters,
+                                                tags: newFilteredTabs,
+                                            });
+                                            if (props.onFiltersChange) {
+                                                props.onFiltersChange({
+                                                    ...props.filters,
+                                                    tags: newFilteredTabs,
+                                                });
+                                            }
+                                        }}
+                                    />
+                                ) : null;
+                            })}
+                        </div>
+                    )}
                     {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && (
                         <div className="flex gap-2 justify-end">
                             <MotionEffect slide inView>

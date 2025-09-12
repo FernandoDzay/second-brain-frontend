@@ -44,5 +44,12 @@ export const apiCall = async <T>(
         return Promise.reject(apiError);
     };
 
-    return client(options).then(onSuccess).catch(onError);
+    return client({
+        paramsSerializer: {
+            indexes: null,
+        },
+        ...options,
+    })
+        .then(onSuccess)
+        .catch(onError);
 };
