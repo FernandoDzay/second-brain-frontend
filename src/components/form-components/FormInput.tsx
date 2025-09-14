@@ -37,7 +37,7 @@ const FormInput: React.FC<InputElementProps> = ({
         <FormField
             control={control}
             name={name}
-            defaultValue={undefinedDefaultValue ? '' : undefined}
+            defaultValue={undefinedDefaultValue ? undefined : ''}
             render={({ field }) => (
                 <FormItem className={cn('', props.className)}>
                     {label && (
