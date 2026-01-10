@@ -39,6 +39,7 @@ const TagForm: React.FC<Props> = ({ onSubmit, loading, error, forcedCategory }) 
                     options={[
                         { label: 'Pagos', value: 'payments' },
                         { label: 'Notas', value: 'notes' },
+                        { label: 'Tareas', value: 'tasks' },
                     ]}
                 />
                 <FormInput name="name" label="Nombre" />

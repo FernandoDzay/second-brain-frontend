@@ -11,15 +11,31 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
     useSidebar,
 } from '@/components/ui/sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { ChevronRight, NotebookPen } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
+type SideBarItem = {
+    label: string;
+    link?: string;
+    icon?: React.ReactNode;
+    children?: {
+        label: string;
+        link: string;
+        icon?: React.ReactNode;
+    }[];
+}[];
 
 const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
     const { pathname } = useLocation();
     const sidebar = useSidebar();
-    const mainLinks = [
+    const mainLinks: SideBarItem = [
         {
             label: 'Dashboard',
             link: '/',
@@ -30,6 +46,37 @@ const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
             link: '/payments',
             icon: <IconReceiptDollar />,
         },
+        {
+            label: 'Tareas',
+            icon: <NotebookPen />,
+            children: [
+                {
+                    label: 'Tareas para hoy',
+                    link: '/tasks/for-today',
+                    // icon: <IconLayoutDashboardFilled />,
+                },
+                {
+                    label: 'Tareas semana',
+                    link: '/tasks/for-week',
+                    // icon: <IconLayoutDashboardFilled />,
+                },
+                {
+                    label: 'Tareas Mes',
+                    link: '/tasks/for-month',
+                    // icon: <IconLayoutDashboardFilled />,
+                },
+                {
+                    label: 'Todas las tareas',
+                    link: '/tasks',
+                    // icon: <IconLayoutDashboardFilled />,
+                },
+                {
+                    label: 'Backlog',
+                    link: '/tasks/backlog',
+                    // icon: <IconLayoutDashboardFilled />,
+                },
+            ],
+        },
     ];
 
     return (
@@ -37,10 +84,7 @@ const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            className="data-[slot=sidebar-menu-button]:!p-1.5"
-                        >
+                        <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
                             <a href="#">
                                 <IconBrain className="!size-5" />
                                 <span className="text-base font-semibold">Second brain</span>
@@ -53,27 +97,57 @@ const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (props) => {
                 <SidebarGroup>
                     <SidebarGroupContent className="flex flex-col gap-2">
                         <SidebarMenu>
-                            {mainLinks.map((item, key) => (
-                                <SidebarMenuItem key={key}>
-                                    <Link
-                                        to={item.link}
-                                        onClick={() => {
-                                            if (sidebar.isMobile) sidebar.setOpenMobile(false);
-                                        }}
+                            {mainLinks.map((item, key) =>
+                                item.children ? (
+                                    <Collapsible
+                                        key={key}
+                                        asChild
+                                        // defaultOpen={item.isActive}
+                                        className="group/collapsible"
                                     >
-                                        <SidebarMenuButton
-                                            className={cn(
-                                                item.link === pathname
-                                                    ? '!bg-primary !text-primary-foreground'
-                                                    : '',
-                                            )}
+                                        <SidebarMenuItem>
+                                            <CollapsibleTrigger asChild>
+                                                <SidebarMenuButton tooltip={item.label}>
+                                                    {item.icon}
+                                                    <span>{item.label}</span>
+                                                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                                </SidebarMenuButton>
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent>
+                                                <SidebarMenuSub>
+                                                    {item.children?.map((subItem) => (
+                                                        <SidebarMenuSubItem key={subItem.label}>
+                                                            <SidebarMenuSubButton
+                                                                asChild
+                                                                className={cn(item.link === pathname ? '!bg-primary !text-primary-foreground' : '')}
+                                                            >
+                                                                <Link to={subItem.link}>
+                                                                    {subItem.icon}
+                                                                    <span>{subItem.label}</span>
+                                                                </Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    ))}
+                                                </SidebarMenuSub>
+                                            </CollapsibleContent>
+                                        </SidebarMenuItem>
+                                    </Collapsible>
+                                ) : (
+                                    <SidebarMenuItem key={key}>
+                                        <Link
+                                            to={item.link || ''}
+                                            onClick={() => {
+                                                if (sidebar.isMobile) sidebar.setOpenMobile(false);
+                                            }}
                                         >
-                                            {item.icon}
-                                            <span>{item.label}</span>
-                                        </SidebarMenuButton>
-                                    </Link>
-                                </SidebarMenuItem>
-                            ))}
+                                            <SidebarMenuButton className={cn(item.link === pathname ? '!bg-primary !text-primary-foreground' : '')}>
+                                                {item.icon}
+                                                <span>{item.label}</span>
+                                            </SidebarMenuButton>
+                                        </Link>
+                                    </SidebarMenuItem>
+                                ),
+                            )}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

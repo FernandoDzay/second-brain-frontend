@@ -1,20 +1,7 @@
 import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import {
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface SelectElementProps extends React.InputHTMLAttributes<HTMLSelectElement> {
     name: string;
@@ -28,16 +15,7 @@ interface SelectElementProps extends React.InputHTMLAttributes<HTMLSelectElement
     triggerClassName?: string;
 }
 
-const FormSelect: React.FC<SelectElementProps> = ({
-    name,
-    label,
-    placeholder,
-    description,
-    isOptional,
-    options,
-    triggerClassName,
-    ...props
-}) => {
+const FormSelect: React.FC<SelectElementProps> = ({ name, label, placeholder, description, isOptional, options, triggerClassName, ...props }) => {
     const { control } = useFormContext();
     return (
         <FormField

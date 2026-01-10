@@ -1,4 +1,5 @@
 import { AvailableTagsType } from '@/modules/tags/tags-catalog';
+import { TaskPriorityType } from '@/modules/tasks/task-priority';
 
 export type Payment = {
     id: number;
@@ -34,5 +35,20 @@ export type Tag = {
     name: string;
     description: string;
 
+    user?: User | null;
+};
+
+export type Task = {
+    id: number;
+    title: string;
+    description: string;
+    startDate: string | null;
+    startTime: string | null;
+    endDate: string | null;
+    endTime: string | null;
+    priority: TaskPriorityType;
+    done: boolean;
+
+    tags?: Tag[];
     user?: User | null;
 };

@@ -28,7 +28,7 @@ export const useCreateTag = () => {
 
 export const useGetTags = (filters?: { category: AvailableTagsType }) => {
     return useQuery<Tag[], ApiError>({
-        queryFn: () => apiCall({ url: '/tags', method: 'GET', data: filters }),
+        queryFn: () => apiCall({ url: '/tags', method: 'GET', params: filters }),
         queryKey: [tagsQueryKey, filters],
     });
 };

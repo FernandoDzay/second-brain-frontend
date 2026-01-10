@@ -25,10 +25,10 @@ import { DataTablePagination } from '@/components/datagrid/DataTablePagination';
 import EmptyTable from '@/components/datagrid/EmptyTable';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import PaymentsFilters from './PaymentsFilters';
-import { Badge } from '@/components/ui/badge';
 import TabButton from '@/components/TabButton';
 import { useGetTags } from '../tags/tags-endpoints';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TagsGroup } from '../tags';
 
 type Props = {
     data?: Payment[];
@@ -97,15 +97,7 @@ const PaymentsTable: React.FC<Props> = (props) => {
             },
             {
                 header: 'Tags',
-                cell: ({ row: { original: row } }) => (
-                    <div className="flex flex-wrap gap-2">
-                        {row.tags?.map((tag) => (
-                            <Badge key={tag.id} variant={'secondary'}>
-                                {tag.name}
-                            </Badge>
-                        ))}
-                    </div>
-                ),
+                cell: ({ row: { original: row } }) => <TagsGroup tags={row.tags} />,
             },
             {
                 id: 'actions',
